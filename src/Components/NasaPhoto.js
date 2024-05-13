@@ -1,14 +1,12 @@
+// NasaPhoto.js
 import React from "react";
 
-const NasaPhoto = (props) => {
+const NasaPhoto = ({ photo }) => {
     return (
-            <div className="nasa-photo-wrapper">
-                <h3>{props.photo.title}</h3>
-                <p>{props.photo.date}</p>
-                <img src={props.photo.hdurl} />
-                <p>{props.photo.explanation}</p>
-            </div>
-    )
+        <div className="nasa-photo-wrapper">
+            <img src={photo.hdurl} alt={photo.title} />
+        </div>
+    );
 }
 
 export default NasaPhoto;
