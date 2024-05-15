@@ -1,5 +1,4 @@
-// App.js
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import NasaPhoto from "./Components/NasaPhoto";
 import "./App.css";
 import axios from "axios";
@@ -7,6 +6,7 @@ import axios from "axios";
 function App() {
   const [data, setData] = useState();
   const [showDescription, setShowDescription] = useState(false);
+  const descriptionRef = useRef(null);
 
   useEffect(() => {
     axios
@@ -21,33 +21,39 @@ function App() {
     setShowDescription(!showDescription);
   };
 
+  const handleScroll = (e) => {
+    const descriptionElement = descriptionRef.current;
+    if (descriptionElement && e.target !== descriptionElement) {
+      descriptionElement.scrollTop += e.deltaY;
+      e.preventDefault();
+    }
+  };
+
   return (
-    <div className="App">
+    <div className="App" onWheel={handleScroll}>
       {data && (
         <div className="photo-container">
           <div className={`photo-wrapper-container ${showDescription ? 'shift-left' : ''}`}>
             <div className="photo-wrapper">
               <NasaPhoto photo={data} />
             </div>
-            <button onClick={toggleDescription} className="toggle-button">
-              {showDescription ? "Hide Details" : "Show Details"}
-            </button>
           </div>
           <div
-            className={`description-wrapper ${
-              showDescription ? "open" : ""
-            }`}
+            ref={descriptionRef}
+            className={`description-wrapper ${showDescription ? "open" : ""}`}
           >
             <div className="description">
               <h2>{data.title}</h2>
               <p>{data.explanation}</p>
             </div>
           </div>
+          <div className="info-button-container">
+            <button className="info-button" onClick={toggleDescription}>i</button>
+          </div>
         </div>
       )}
     </div>
   );
 }
-
 
 export default App;
